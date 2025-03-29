@@ -5,7 +5,7 @@
 #include <regex>
 #include "utility.hpp"
 
-const regex image_regex(".*\\.(jpg|jpeg|png|bmp|ppm|pbm|pgm|gif|tif|tiff|webp|)$", std::regex::icase);
+const regex image_regex(".*\\.(jpg|jpeg|png)$", std::regex::icase);
 
 /* The main menu for the interface */
 void interface(void);
