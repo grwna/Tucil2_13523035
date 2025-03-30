@@ -2,6 +2,8 @@
 #define _UTILITY_HPP
 
 #include <string>
+#include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <limits>
 using namespace std;
@@ -24,4 +26,19 @@ void input(T &var){
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
+/**
+ * @brief Create a file and all parent directory (if not exists)
+ *  
+ * @param Absolute path to file
+ */
+void create_file(const string path);
+
+/**
+ * @brief Validate an input variable as valid integer or not
+ * 
+ * @param var variable to check
+ * @return true if input is a valid integer,
+ * @return false if input is not valid integer
+ */
+bool validate_int(int var);
 #endif
