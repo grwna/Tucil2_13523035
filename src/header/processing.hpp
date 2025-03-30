@@ -7,20 +7,6 @@
 #include "error.hpp"
 #include <filesystem>
 
-/** @brief Represents an image.*/
-struct Image {
-    /* Image data. */
-    uint8_t* data;
-    /* Image width. */
-    int width;
-    /* Image height. */
-    int height;
-    /* Number of channels. */
-    int channels;
-    /* Filetype of the image */
-    string type;
-  };
-
 /**
  * @brief Read the RGB pixel data from an image file
  * 

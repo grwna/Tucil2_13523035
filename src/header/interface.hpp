@@ -4,8 +4,9 @@
 #include <filesystem>
 #include <regex>
 #include "utility.hpp"
+#include "processing.hpp"
 
-const regex image_regex(".*\\.(jpg|jpeg|png)$", std::regex::icase);
+const regex image_regex(".*\\.(jpg|jpeg|png)$", regex::icase);
 
 /* The main menu for the interface */
 void interface(void);

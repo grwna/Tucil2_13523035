@@ -2,6 +2,7 @@
 #define QUADTREE_H
 
 #include <functional>
+#include <iostream>
 #include <vector>
 #include <cstdint>
 #include <string>
