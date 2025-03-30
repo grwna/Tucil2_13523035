@@ -16,6 +16,8 @@ build: clean
 			$(SRC)/interface.cpp   \
 			$(SRC)/processing.cpp  \
 			$(SRC)/utility.cpp     \
+			$(SRC)/quadtree.cpp     \
+			$(SRC)/error.cpp     \
 			-o $(OUT)/main
 
 clean:
