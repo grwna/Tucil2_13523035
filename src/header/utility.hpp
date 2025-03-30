@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <cmath>
 using namespace std;
 
 /**
@@ -21,9 +22,16 @@ void trim(string &str);
  * @param var variable to save to 
  */
 template<class T>
-void input(T &var){
-    cin >> var;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+bool input(T &var) {
+    string line;
+    if (getline(cin, line)) {
+        istringstream iss(line);
+        if (iss >> var) {
+            return true;
+        }
+    }
+    cin.clear();
+    return false;
 }
 
 /**
@@ -41,4 +49,14 @@ void create_file(const string path);
  * @return false if input is not valid integer
  */
 bool validate_int(int var);
+
+/**
+ * @brief Validate threshold value
+ * 
+ * @param mode error calculation mode
+ * @param threshold the threshold to validate
+ * @return true if valid 
+ */
+bool validate_threshold(int mode, int threshold);
+
 #endif

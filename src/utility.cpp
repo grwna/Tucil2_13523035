@@ -29,3 +29,19 @@ bool validate_int(int var) {
     ss >> temp;
     return !ss.fail() && ss.eof();
 }
+
+bool validate_threshold(int mode, int threshold){
+    switch (mode){
+        case 1:
+            return (threshold >= 0 && threshold <= pow(255,2));
+        case 2:
+        case 3:
+            return (threshold >= 0 && threshold <= 255);
+        case 4:
+            return (threshold >= 0 && threshold <= 8);
+        case 5:
+            return (threshold >= -1 && threshold <= 1);
+        default:
+            return false;
+    }
+}
