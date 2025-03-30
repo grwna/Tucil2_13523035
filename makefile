@@ -1,24 +1,28 @@
 # Compiler & linker
-CXX            = g++
+CXX = g++
+CXXFLAGS = -g
 
 # Path
 SRC = src
 OUT = bin
-OBJ = $(patsubst %/%.cpp, $(OUT)/%.o, $(wildcard $(addsuffix /*.cpp, $(SRC))))
 
 # Targets
-run-clean: clean run
-run: all
+run: 
 	@$(OUT)/main
-all: build
-build: $(OBJ)
-	@$(CXX)  $^ -o $(OUT)/main
-
-$(OUT)/%.o: %/%.cpp | $(OUT)
-	@$(CXX) -c $< -o $@	
-
-$(OUT):
-	@mkdir -p $(OUT)
+all: build run
+build: clean
+	@$(CXX) $(CXXFLAGS) 		   \
+			$(SRC)/main.cpp 	   \
+			$(SRC)/interface.cpp   \
+			$(SRC)/processing.cpp  \
+			$(SRC)/utility.cpp     \
+			-o $(OUT)/main
 
 clean:
 	rm -rf $(OUT)/*
+
+clean-i: 
+	rm -rf io/input/*
+clean-o:
+	rm -rf io/output/*
+clean-io: clean-i clean-o
