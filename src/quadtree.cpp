@@ -3,6 +3,8 @@
 Quadtree::Quadtree(int x, int y, int width, int height) : 
     region({x, y, width, height}), isLeaf(true){
     for (int i = 0; i < 4; i++) children[i] = nullptr;
+    this->region.pixel_count = (long long)region.width * region.height; // untuk gambar berdimensi sangat besar, menggunakan long-long 
+
 }
 
 Quadtree::~Quadtree(){
@@ -13,8 +15,6 @@ Quadtree::~Quadtree(){
 
 vector<uint8_t> Quadtree::calculate_mean_color(const Image& img, const Region& region){
     vector<uint8_t> mean(img.channels, 0);
-    long long pixelCount = (long long)region.width * region.height; // Avoids overflow 
-
     for (int y = region.y; y < region.y + region.height; ++y) {
         for (int x = region.x; x < region.x + region.width; ++x) {
             for (int c = 0; c < img.channels; ++c) {
@@ -22,10 +22,7 @@ vector<uint8_t> Quadtree::calculate_mean_color(const Image& img, const Region& r
             }
         }
     }
-
-    for (int c = 0; c < img.channels; ++c) {
-        mean[c] = (uint8_t)(mean[c] / pixelCount);
-    }
+    for (int c = 0; c < img.channels; ++c) mean[c] = (uint8_t)(mean[c] / region.pixel_count);
 
     return mean;
 }
@@ -40,14 +37,14 @@ void Quadtree::build(const Image& img, int min_block, double threshold, function
     }
 
     isLeaf = false;
-    int halfWidth = region.width / 2;
-    int halfHeight = region.height / 2;
+    int half_width = region.width / 2;
+    int half_height = region.height / 2;
 
     // Recursion
-    children[0] = new Quadtree(region.x, region.y, halfWidth, halfHeight);
-    children[1] = new Quadtree(region.x + halfWidth, region.y, halfWidth, halfHeight);
-    children[2] = new Quadtree(region.x, region.y + halfHeight, halfWidth, halfHeight);
-    children[3] = new Quadtree(region.x + halfWidth, region.y + halfHeight, halfWidth, halfHeight);
+    children[0] = new Quadtree(region.x, region.y, half_width, half_height);
+    children[1] = new Quadtree(region.x + half_width, region.y, half_width, half_height);
+    children[2] = new Quadtree(region.x, region.y + half_height, half_width, half_height);
+    children[3] = new Quadtree(region.x + half_width, region.y + half_height, half_width, half_height);
 
     for (int i = 0; i < 4; ++i) {
         children[i]->build(img, min_block, threshold, error_func);

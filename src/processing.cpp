@@ -18,3 +18,19 @@ void save_image_file(Image img, string path){
         stbi_write_jpg(path.c_str(), img.width, img.height, img.channels, img.data, img.width * img.channels);
     }
 }
+
+void compression(string in_path, string out_path, int mode, double threshold, int min_block){
+    Image img = read_image_file(in_path);
+
+    typedef double (*Error_Func)(const Image&, const Region&, const std::vector<uint8_t>&);  // Gabisa ditaro di hpp
+    function<double(const Image&, const Region&, const vector<uint8_t>&)> error_func;
+
+    switch (mode){
+        case 1:
+            error_func = (Error_Func)(variance);
+
+    }
+
+
+    save_image_file(img, out_path);
+}

@@ -2,13 +2,27 @@
 #define QUADTREE_H
 
 #include <functional>
-#include "processing.hpp"
+#include <vector>
+#include <cstdint>
+#include <string>
+
+using namespace std;
+
+/** Represents an image.*/
+struct Image {
+    uint8_t* data;  /* Image data. */
+    int width;      /* Image width. */
+    int height;     /* Image height. */
+    int channels;   /* Number of channels. */
+    string type;    /* Filetype of the image */
+  };
 
 /* Represents a region inside the image */
 struct Region {
-    int x, y;        /* Coordinates of the region's top-left corner. */
-    int width;       /* Width of the region. */
-    int height;      /* Height of the region. */
+    int x, y;               /* Coordinates of the region's top-left corner. */
+    int width;              /* Width of the region. */
+    int height;             /* Height of the region. */
+    long long pixel_count;  /* Amount of pixels within a region */
 };
 
 /**
@@ -18,10 +32,10 @@ struct Region {
  */
 class Quadtree {
     public:
-        Region region; /* Region of this quadtree instance */
-        std::vector<uint8_t> mean_color; /* Mean color of the pixels in the region. */
-        bool isLeaf;     /* Indicates if the node is a leaf (no children). */
-        Quadtree* children[4]; /* Pointers to the four child nodes (NW, NE, SW, SE). */
+        Region region;                   /* Region of this quadtree instance */
+        vector<uint8_t> mean_color; /* Mean color of the pixels in the region. */
+        bool isLeaf;                     /* Indicates if the node is a leaf (no children). */
+        Quadtree* children[4];           /* Pointers to the four child nodes (NW, NE, SW, SE). */
     
         /**
          * @brief Constructor for the Quadtree node.
@@ -52,10 +66,10 @@ class Quadtree {
         /**
         * @brief Builds the Quadtree recursively.
         *
-        * @param img       Image data.
+        * @param img         Image data.
         * @param min_block   Minimum size of a region.
-        * @param threshold Tolerance for color variance.
-        * @param error_func Function to calculate the error.
+        * @param threshold   Tolerance for color variance.
+        * @param error_func  Function to calculate the error.
         */
         void build(const Image& img, int min_block, double threshold, function<double(const Image&, const Region&, const vector<uint8_t>&)> error_func);
 

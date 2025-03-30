@@ -3,11 +3,9 @@
 
 #include "../lib/stb_image.h"
 #include "../lib/stb_image_write.h"
-#include <vector>
-#include <string>
-#include <cstdint>
+#include "quadtree.hpp"
+#include "error.hpp"
 #include <filesystem>
-using namespace std;
 
 /** @brief Represents an image.*/
 struct Image {
@@ -40,5 +38,16 @@ Image read_image_file(string path);
  * @param path 
  */
 void save_image_file(const Image img, string path);
+
+/**
+ * @brief Handles the entire proccess of compression, to be used in the interface
+ * 
+ * @param in_path  The path to the input image file.
+ * @param out_path The path to save the compressed image file.
+ * @param mode     The error measurement  mode.
+ * @param threshold The threshold value for the compression algorithm 
+ * @param min_block The minimum block size for quadtree subdivision.
+ */
+void compression(string in_path, string out_path, int mode, double threshold, int min_block);
 
 #endif
