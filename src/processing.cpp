@@ -24,19 +24,31 @@ void save_image_file(Image img, string path){
 void compression(string in_path, string out_path, int mode, double threshold, int min_block){
     Image img = read_image_file(in_path);
 
-    typedef double (*Error_Func)(const Image&, const Region&, const vector<uint8_t>&);  // Gabisa ditaro di hpp
     function<double(const Image&, const Region&, const vector<uint8_t>&)> error_func;
 
     switch (mode){
         case 1:
-            error_func = (Error_Func)(variance);
+            error_func = variance;
+            break;
+        case 2:
+            error_func = mean_absolute_deviation;
+            break;
+        case 3:
+            error_func = max_pixel_difference;
+            break;
+        case 4:
+            error_func = entropy;
+            break;
+        case 5:
+            error_func = ssim;
+            break;
+        default:
+            error_func = nullptr;
+            break;
     }
+
     Quadtree tree = Quadtree(0, 0, img.width, img.height);
     tree.build(img, min_block, threshold, error_func);
     tree.draw(img);
     save_image_file(img, out_path);
-}
-
-void print_data(uint8_t* list){
-    
 }

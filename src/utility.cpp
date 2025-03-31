@@ -22,14 +22,6 @@ void create_file(string path){
     }
 }
 
-bool validate_int(int var) {
-    stringstream ss;
-    ss << var;
-    int temp;
-    ss >> temp;
-    return !ss.fail() && ss.eof();
-}
-
 bool validate_threshold(int mode, int threshold){
     switch (mode){
         case 1:

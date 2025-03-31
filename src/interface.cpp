@@ -1,12 +1,11 @@
 #include "header/interface.hpp"
 
 void interface(){
-    cls();
-    cout << string(15, '=') << " Welcome to Tucil 2 " << string(15, '=') << endl;
-    wait_for_input();
-
     int choice;
     while (true) {
+        cls();
+        cout << string(15, '=') << " Welcome to Tucil 2 " << string(15, '=') << endl;
+        wait_for_input();
         cout << "Image Compression Using Quadtree" << endl << endl;
         cout << "1. Start" << endl;
         cout << "2. Help" << endl;
@@ -18,56 +17,102 @@ void interface(){
         else if (choice == 3){exit(0);}
         else {
             input_error();
+            continue;
         }
     }
 }
 
 void main_program(){
-    string path;
-    int choice;
-    int threshold;
+    string input_path;
+    string output_path;
+    int mode;
+    double threshold;
     int min_block;
 
     while (true){
+        cls();
         cout << "Enter the absolute path of the image (make sure the file exists)" << endl;
         cout << "Default: 'io/input/{image}.{ext}'" << endl << endl;
-        cout << ">>";
-        input(path);
-        trim(path);
-        if (path.find("/") == string::npos || path.find("\\") == string::npos){ // Default path
-            path = "io/input/";
+        cout << ">> ";
+        input(input_path);
+        trim(input_path);
+        if (input_path.find("/") == string::npos && input_path.find("\\") == string::npos){ // Default input_path
+            input_path = "io/input/" + input_path;
         }
-        else if (!filesystem::exists(path) || !regex_match(path, image_regex)){
+        cout << input_path << endl;
+        if (!filesystem::exists(input_path) || !regex_match(input_path, image_regex)){
+            cout << "File doesn't exist or doesnt have a valid file extension!" << endl;
             input_error();
             continue;}
         break;
     }
 
     while (true){
+        cls();
         cout << "Pick the Error Measurement Methods" << endl;
         cout << "1. Variance" << endl;
-        cout << "2. Mean Absolute Deviation (MAD)" << endl;
+        cout << "2. Mean Absolute Deviation" << endl;
         cout << "3. Max Pixel Difference" << endl;
         cout << "4. Entropy" << endl;
         cout << "5. Structural Similarity Index (SSIM)" << endl;
-        input(choice);
-        if (choice < 1 || choice > 5){
+        cout << ">> ";
+        if (!input(mode) || (mode < 1 || mode > 5)){
             input_error();
             continue;}
         break;
     }
 
     while (true){
-        cout << "Enter threshold";
-        input(threshold);
+        cls();
+        cout << "Enter threshold" << endl << endl;
+        cout << "Valid threshold ranges" << endl;
+        cout << "Variance:                 [0, 65025]" << endl;
+        cout << "Mean Absolute Difference: [0, 255]" << endl;
+        cout << "Max Pixel Difference:     [0, 255]" << endl;
+        cout << "Entropy:                  [0, 8]" << endl;
+        cout << "SSIM:                     [-1, 1]" << endl;
+        cout << ">> ";
+        // TODO: Validate double
+        if (!input(threshold)) threshold = -999;
+        if (!validate_threshold(mode, threshold)){
+            input_error();
+            continue;
+        }
+        break;
     }
     
     while (true){
-        cout << "Enter minimum block size";
-        input(min_block);
+        cls();
+        cout << "Enter minimum block size" << endl;
+        cout << ">> ";
+        if (!input(min_block)){
+            input_error();
+            continue;
+        }
+        break;
     }
 
+    while (true){
+        cls();
+        cout << "Enter the absolute path of where to save the image" << endl;
+        cout << "Default: 'io/output/{image}.{ext}'" << endl << endl;
+        cout << ">> ";
+        input(output_path);
+        trim(output_path);
+        if (output_path.find("/") == string::npos && output_path.find("\\") == string::npos){ // Default input_path
+            output_path = "io/output/" + output_path;
+        }
+        if (!regex_match(output_path, image_regex)){
+            cout << "Invalid path and/or filename!" << endl;
+            input_error();
+            continue;}
+        create_file(output_path);
+        break;
+    }
 
+    compression(input_path, output_path, mode, threshold, min_block);
+    cout << "saved successfully to " << output_path << endl;
+    wait_for_input();
 }
 
 void help(){
@@ -87,10 +132,15 @@ void cls(){
 }
 
 void input_error(){
+    
     cout << endl;
     clr(string(15, '='), 9);
     clr("Invalid input!", 9);
     clr(string(15, '='), 9);
     cout << endl;
+    
+    // Clear buffer
+    cin.clear();
+
     wait_for_input();
 }
