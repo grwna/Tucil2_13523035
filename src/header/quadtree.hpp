@@ -6,15 +6,17 @@
 #include <vector>
 #include <cstdint>
 #include <string>
+#include "error.hpp"
 
 using namespace std;
 
 /** Represents an image.*/
 struct Image {
-    uint8_t* data;  /* Image data. */
-    int width;      /* Image width. */
-    int height;     /* Image height. */
-    int channels;   /* Number of channels. */
+    uint8_t* data;  /* Image data */
+    int width;      /* Image width */
+    int height;     /* Image height */
+    int channels;   /* Number of channels */
+    int size;       /* Original file size in bytes */
     string type;    /* Filetype of the image */
   };
 

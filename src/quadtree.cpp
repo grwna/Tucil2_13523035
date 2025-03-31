@@ -15,30 +15,33 @@ Quadtree::~Quadtree(){
 
 vector<uint8_t> Quadtree::calculate_mean_color(const Image& img, const Region& region){
     vector<uint8_t> mean(img.channels, 0);
+    vector<long long> pixel_sum(img.channels, 0);
+
     for (int y = region.y; y < region.y + region.height; ++y) {
         for (int x = region.x; x < region.x + region.width; ++x) {
             for (int c = 0; c < img.channels; ++c) {
-                mean[c] += img.data[(y * img.width + x) * img.channels + c];
+                pixel_sum[c] += img.data[(y * img.width + x) * img.channels + c];
             }
         }
     }
-    for (int c = 0; c < img.channels; ++c) mean[c] = (uint8_t)(mean[c] / region.pixel_count);
+    for (int c = 0; c < img.channels; ++c) mean[c] = (uint8_t)(pixel_sum[c] / (double)region.pixel_count);
 
     return mean;
 }
 
 void Quadtree::build(const Image& img, int min_block, double threshold, function<double(const Image&, const Region&, const vector<uint8_t>&)>error_func){
-    mean_color = calculate_mean_color(img, region);
-    double error = error_func(img, region, mean_color);
+    this->mean_color = calculate_mean_color(img, region);
+    double error = error_func(img, region, mean_color, 0) /3.0;
+    
+    int half_width = region.width / 2;
+    int half_height = region.height / 2;
 
-    if (region.width <= min_block || region.height <= min_block || error <= threshold) { // Base case
+    if ((error_func.target_type() == typeid(ssim) && error >= threshold) || region.width <= min_block || region.height <= min_block || error <= threshold) { // Base case
         isLeaf = true;
         return;
     }
 
     isLeaf = false;
-    int half_width = region.width / 2;
-    int half_height = region.height / 2;
 
     // Recursion
     children[0] = new Quadtree(region.x, region.y, half_width, half_height);
@@ -54,14 +57,15 @@ void Quadtree::build(const Image& img, int min_block, double threshold, function
 void Quadtree::draw(Image& img) {
     if (isLeaf) {
         for (int y = region.y; y < region.y + region.height; ++y) {
-            for (int x = region.x; x < region.x + region.width; ++x) {
+            uint8_t* row_ptr = &img.data[(y * img.width + region.x) * img.channels];
+            for (int x = 0; x < region.width; ++x) {
                 for (int c = 0; c < img.channels; ++c) {
-                    img.data[(y * img.width + x) * img.channels + c] = mean_color[c];
+                    row_ptr[x * img.channels + c] = mean_color[c];
                 }
             }
         }
         return;
-    }
+    }    
 
     for (int i = 0; i < 4; ++i) children[i]->draw(img);
     

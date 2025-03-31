@@ -13,6 +13,15 @@ double max_pixel_difference(const Image& img, const Region& region, const vector
 
 double entropy(const Image& img, const Region& region, const vector<uint8_t>& mean);
 
+/**
+ * @brief Helper functionf or entropy, calculates the entropy for a channel
+ * 
+ * @param counts The occurence of every pixel for one channel
+ * @param pixel_count Amount of pixels in a block
+ * @return Entropy for one channel
+ */
+double calculate_entropy(const vector<int>& counts, long long pixel_count);
+
 double ssim(const Image& img, const Region& region, const vector<uint8_t>& mean);
 
 # endif
