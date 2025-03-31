@@ -6,7 +6,6 @@
 #include <vector>
 #include <cstdint>
 #include <string>
-#include "error.hpp"
 
 using namespace std;
 
@@ -17,6 +16,7 @@ struct Image {
     int height;     /* Image height */
     int channels;   /* Number of channels */
     int size;       /* Original file size in bytes */
+    int mode;       /* Mode of compression */
     string type;    /* Filetype of the image */
   };
 
@@ -74,7 +74,7 @@ class Quadtree {
         * @param threshold   Tolerance for color variance.
         * @param error_func  Function to calculate the error.
         */
-        void build(const Image& img, int min_block, double threshold, function<double(const Image&, const Region&, const vector<uint8_t>&)> error_func);
+        void build(const Image& img, int min_block, double threshold, function<double(const Image&, const Region&, const vector<uint8_t>&, int)> error_func);
 
         /**
         * @brief Draws the compressed image based on the Quadtree, the image data is modified into the compressed data.

@@ -23,24 +23,26 @@ void save_image_file(Image img, string path){
 // TODO: Validation
 void compression(string in_path, string out_path, int mode, double threshold, int min_block){
     Image img = read_image_file(in_path);
+    img.mode = mode;
 
-    function<double(const Image&, const Region&, const vector<uint8_t>&)> error_func;
+    typedef double (*ErrorFunc)(const Image&, const Region&, const vector<uint8_t>&, int);
+    function<double(const Image&, const Region&, const vector<uint8_t>&, int)> error_func;
 
     switch (mode){
         case 1:
-            error_func = variance;
+            error_func = (ErrorFunc) variance;
             break;
         case 2:
-            error_func = mean_absolute_deviation;
+            error_func = (ErrorFunc) mean_absolute_deviation;
             break;
         case 3:
-            error_func = max_pixel_difference;
+            error_func = (ErrorFunc) max_pixel_difference;
             break;
         case 4:
-            error_func = entropy;
+            error_func = (ErrorFunc) entropy;
             break;
         case 5:
-            error_func = ssim;
+            error_func = (ErrorFunc) ssim;
             break;
         default:
             error_func = nullptr;

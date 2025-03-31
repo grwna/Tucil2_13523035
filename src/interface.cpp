@@ -54,7 +54,7 @@ void main_program(){
         cout << "2. Mean Absolute Deviation" << endl;
         cout << "3. Max Pixel Difference" << endl;
         cout << "4. Entropy" << endl;
-        cout << "5. Structural Similarity Index (SSIM)" << endl;
+        cout << "5. Structural Similarity Index (SSIM)" << endl << endl;
         cout << ">> ";
         if (!input(mode) || (mode < 1 || mode > 5)){
             input_error();

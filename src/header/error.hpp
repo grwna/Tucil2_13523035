@@ -5,13 +5,13 @@
 #include <cmath>
 
 // Explanation for each methods: https://docs.google.com/document/d/1N_ENR9VQI9XdOTtVinCBd7vVqb2tbeclMInyARlmVcs
-double variance(const Image& img, const Region& region, const vector<uint8_t>& mean);
+double variance(const Image& img, const Region& region, const vector<uint8_t>& mean, int ch_idx);
 
-double mean_absolute_deviation(const Image& img, const Region& region, const vector<uint8_t>& mean);
+double mean_absolute_deviation(const Image& img, const Region& region, const vector<uint8_t>& mean, int ch_idx);
 
-double max_pixel_difference(const Image& img, const Region& region, const vector<uint8_t>& mean);
+double max_pixel_difference(const Image& img, const Region& region, const vector<uint8_t>& mean, int ch_idx);
 
-double entropy(const Image& img, const Region& region, const vector<uint8_t>& mean);
+double entropy(const Image& img, const Region& region, const vector<uint8_t>& mean, int ch_idx);
 
 /**
  * @brief Helper functionf or entropy, calculates the entropy for a channel
@@ -22,6 +22,6 @@ double entropy(const Image& img, const Region& region, const vector<uint8_t>& me
  */
 double calculate_entropy(const vector<int>& counts, long long pixel_count);
 
-double ssim(const Image& img, const Region& region, const vector<uint8_t>& mean);
+double ssim(const Image& img, const Region& region, const vector<uint8_t>& mean, int ch_idx);
 
 # endif

@@ -29,21 +29,20 @@ vector<uint8_t> Quadtree::calculate_mean_color(const Image& img, const Region& r
     return mean;
 }
 
-void Quadtree::build(const Image& img, int min_block, double threshold, function<double(const Image&, const Region&, const vector<uint8_t>&)>error_func){
+void Quadtree::build(const Image& img, int min_block, double threshold, function<double(const Image&, const Region&, const vector<uint8_t>&, int)>error_func){
     this->mean_color = calculate_mean_color(img, region);
-    double error = error_func(img, region, mean_color, 0) /3.0;
+    double error = (error_func(img, region, mean_color, 0) + error_func(img, region, mean_color, 1) + error_func(img, region, mean_color, 2)) /3.0;
     
     int half_width = region.width / 2;
     int half_height = region.height / 2;
 
-    if ((error_func.target_type() == typeid(ssim) && error >= threshold) || region.width <= min_block || region.height <= min_block || error <= threshold) { // Base case
+    if ((img.mode == 5 && error <= threshold) || region.width <= min_block || region.height <= min_block || error <= threshold) {
         isLeaf = true;
         return;
     }
 
     isLeaf = false;
 
-    // Recursion
     children[0] = new Quadtree(region.x, region.y, half_width, half_height);
     children[1] = new Quadtree(region.x + half_width, region.y, half_width, half_height);
     children[2] = new Quadtree(region.x, region.y + half_height, half_width, half_height);
