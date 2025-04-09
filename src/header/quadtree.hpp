@@ -1,6 +1,7 @@
 #ifndef QUADTREE_H
 #define QUADTREE_H
 
+#include "utility.hpp"
 #include <functional>
 #include <iostream>
 #include <vector>
@@ -56,6 +57,20 @@ class Quadtree {
          * Recursively deletes all child nodes to prevent memory leaks.
          */
         ~Quadtree();
+        
+        /**
+         * @brief Calculate the maximum depth
+         * 
+         * @return The tree's maximum depth
+         */
+        int get_depth();
+
+        /**
+         * @brief Calculate the amount of nodes in the tree
+         * 
+         * @return AMount of nodes in the tree
+         */
+        long long get_node_count();
 
         /**
          * @brief Calculates the mean color of a region in the image.
@@ -82,6 +97,6 @@ class Quadtree {
         * @param img Image data to modify.
         */
         void draw(Image& img);
-        };
+    };
 
 #endif

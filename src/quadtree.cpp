@@ -13,6 +13,28 @@ Quadtree::~Quadtree(){
     }
 }
 
+int Quadtree::get_depth() {
+    if (isLeaf) {
+        return 0;
+    } else {
+        int max_child_depth = 0;
+        for (int i = 0; i < 4; ++i) {
+             max_child_depth = max(max_child_depth, children[i]->get_depth());
+        }
+        return 1 + max_child_depth;
+    }
+}
+
+long long Quadtree::get_node_count() {
+    long long count = 1; // Current node
+    if (!isLeaf) {
+        for (int i = 0; i < 4; ++i) {
+            count += children[i]->get_node_count(); 
+        }
+    }
+    return count;
+}
+
 vector<uint8_t> Quadtree::calculate_mean_color(const Image& img, const Region& region){
     vector<uint8_t> mean(img.channels, 0);
     vector<long long> pixel_sum(img.channels, 0);
@@ -69,3 +91,4 @@ void Quadtree::draw(Image& img) {
     for (int i = 0; i < 4; ++i) children[i]->draw(img);
     
 }
+
