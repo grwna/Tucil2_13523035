@@ -10,7 +10,7 @@ void interface(){
         cout << "1. Start" << endl;
         cout << "2. Help" << endl;
         cout << "3. Exit" << endl;
-        cout << endl << "Select and option: ";
+        cout << endl << "Select an option: ";
         input(choice);
         if (choice == 1){main_program();}
         else if (choice == 2){help();}
@@ -29,9 +29,11 @@ void main_program(){
     double threshold;
     int min_block;
 
+
     while (true){
         cls();
         cout << "Enter the absolute path of the image (make sure the file exists)" << endl;
+        cout << "Entering just the name of the file will use the default path instead" << endl;
         cout << "Default: 'io/input/{image}.{ext}'" << endl << endl;
         cout << ">> ";
         input(input_path);
@@ -62,6 +64,7 @@ void main_program(){
         break;
     }
 
+
     while (true){
         cls();
         cout << "Enter threshold" << endl << endl;
@@ -70,7 +73,7 @@ void main_program(){
         cout << "Mean Absolute Difference: [0, 255]" << endl;
         cout << "Max Pixel Difference:     [0, 255]" << endl;
         cout << "Entropy:                  [0, 8]" << endl;
-        cout << "SSIM:                     [-1, 1]" << endl;
+        cout << "SSIM:                     [-1, 1]" << endl << endl;
         cout << ">> ";
         // TODO: Validate double
         if (!input(threshold)) threshold = -999;
@@ -95,6 +98,7 @@ void main_program(){
     while (true){
         cls();
         cout << "Enter the absolute path of where to save the image" << endl;
+        cout << "Entering just the name of the file will use the default path instead" << endl;
         cout << "Default: 'io/output/{image}.{ext}'" << endl << endl;
         cout << ">> ";
         input(output_path);
@@ -105,13 +109,17 @@ void main_program(){
         if (!regex_match(output_path, image_regex)){
             cout << "Invalid path and/or filename!" << endl;
             input_error();
-            continue;}
-        create_file(output_path);
+            continue;
+        }
+        if (input_path == output_path){
+            cout << "Output path cannot be the same as Input path" << endl;
+            input_error();
+            continue;
+        }
         break;
     }
 
     compression(input_path, output_path, mode, threshold, min_block);
-    cout << "saved successfully to " << output_path << endl;
     wait_for_input();
 }
 
@@ -121,7 +129,7 @@ void help(){
 }
 
 void wait_for_input(){
-    cout << "Press enter to continue...";
+    cout << endl << "Press enter to continue...";
     cin.sync();
     cin.get();
     cls();

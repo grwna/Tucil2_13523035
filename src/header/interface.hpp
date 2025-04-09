@@ -3,7 +3,6 @@
 
 #include <filesystem>
 #include <regex>
-#include "utility.hpp"
 #include "processing.hpp"
 
 const regex image_regex(".*\\.(jpg|jpeg|png)$", regex::icase);
