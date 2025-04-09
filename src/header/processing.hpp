@@ -5,6 +5,7 @@
 #include "../lib/stb_image_write.h"
 #include "quadtree.hpp"
 #include "error.hpp"
+#include <chrono>
 #include <filesystem>
 
 /**
@@ -26,7 +27,8 @@ Image read_image_file(string path);
 void save_image_file(const Image img, string path);
 
 /**
- * @brief Handles the entire proccess of compression, to be used in the interface
+ * Handles the entire proccess of compression, to be used in the interface
+ * NOTE: Execution Time and File Size calculations are done here 
  * 
  * @param in_path  The path to the input image file.
  * @param out_path The path to save the compressed image file.

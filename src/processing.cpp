@@ -49,8 +49,42 @@ void compression(string in_path, string out_path, int mode, double threshold, in
             break;
     }
 
+    auto start_time = chrono::high_resolution_clock::now();
     Quadtree tree = Quadtree(0, 0, img.width, img.height);
     tree.build(img, min_block, threshold, error_func);
     tree.draw(img);
-    save_image_file(img, out_path);
+    auto execution_time_object = chrono::high_resolution_clock::now() - start_time;
+    double execution_time = chrono::duration<double, std::milli>(execution_time_object).count();    // in ms
+
+    try {
+        create_file(out_path);
+        save_image_file(img, out_path);
+        cout << "Compressed image saved successfully to " << out_path << endl;
+        cout << "Execution time: " << execution_time << " ms" << endl << endl;
+
+        cout << "Parameters:" << endl;
+        cout << "Error Method: " << mode << endl;
+        cout << "Threshold: " << threshold << endl;
+        cout << "Minimum Block Size: " << min_block << endl << endl;
+
+        try {
+            uintmax_t input_file_size = filesystem::file_size(in_path);
+            uintmax_t output_file_size = filesystem::file_size(out_path);
+            double compression_percent = (1 - ((double)output_file_size/(double)input_file_size)) * 100;
+            cout << "Original Size: " << input_file_size << " Bytes" << endl;
+            cout << "Compressed Size: " << output_file_size << " Bytes" << endl;
+            cout << "Compression Percentage: " << compression_percent << "%" << endl;
+            
+        } catch (const exception e){
+            cout << "Error reading file size!" << endl;
+        }
+
+        cout << "Depth of Tree: " << tree.get_depth() << endl;
+        cout << "Amount of Nodes: " << tree.get_node_count() << endl;
+    }
+    catch (const exception &e){
+        cout << "Failed to save file!" << endl;
+    }
+
+
 }
