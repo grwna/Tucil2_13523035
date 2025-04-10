@@ -97,6 +97,15 @@ class Quadtree {
         * @param img Image data to modify.
         */
         void draw(Image& img);
+
+        /**
+         * @brief Draw the compressed image up to a certain depth only, to be used for GIF construction
+         * 
+         * @param img Image data
+         * @param curr_depth Current depth (for recursion)
+         * @param limit_depth Max depth to draw the image to 
+         */
+        void draw_to_depth(Image& img, int curr_depth, int limit_depth);
     };
 
 #endif

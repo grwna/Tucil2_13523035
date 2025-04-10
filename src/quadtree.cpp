@@ -89,6 +89,25 @@ void Quadtree::draw(Image& img) {
     }    
 
     for (int i = 0; i < 4; ++i) children[i]->draw(img);
-    
+}
+
+void Quadtree::draw_to_depth(Image& img, int curr_depth, int limit_depth){
+    if (isLeaf || curr_depth == limit_depth) {
+        for (int y = region.y; y < region.y + region.height; ++y) {
+            uint8_t* row_ptr = &img.data[(y * img.width + region.x) * img.channels];
+            for (int x = 0; x < region.width; ++x) {
+                for (int c = 0; c < img.channels; ++c) {
+                    row_ptr[x * img.channels + c] = mean_color[c];
+                }
+            }
+        }
+        return;
+    }
+
+    if (!isLeaf && curr_depth < limit_depth) {
+        for (int i = 0; i < 4; ++i) {
+            children[i]->draw_to_depth(img, curr_depth + 1, limit_depth);
+        }
+    }
 }
 
