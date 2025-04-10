@@ -4,20 +4,24 @@ void interface(){
     int choice;
     while (true) {
         cls();
-        cout << string(15, '=') << " Welcome to Tucil 2 " << string(15, '=') << endl;
+        cout << endl << endl;
+        clr(welcome_banner, 196);
         wait_for_input();
-        cout << "Image Compression Using Quadtree" << endl << endl;
-        cout << "1. Start" << endl;
-        cout << "2. Help" << endl;
-        cout << "3. Exit" << endl;
-        cout << endl << "Select an option: ";
-        input(choice);
-        if (choice == 1){main_program();}
-        else if (choice == 2){help();}
-        else if (choice == 3){exit(0);}
-        else {
-            input_error();
-            continue;
+
+        while(true){
+            clr("  ---------------------------------- ", 227);
+            clr(" | Image Compression Using Quadtree |", 227);
+            clr("  ---------------------------------- ", 227);
+            clr(sleepy_cat, 230);
+            cout << "Select an option: ";
+            input(choice);
+            if (choice == 1){main_program();}
+            else if (choice == 2){help();}
+            else if (choice == 3){exit(0);}
+            else {
+                input_error();
+                continue;
+            }
         }
     }
 }
@@ -25,11 +29,15 @@ void interface(){
 void main_program(){
     string input_path;
     string output_path;
+    string gif_path = "null";
     int mode;
     double threshold;
     int min_block;
+    double target;
+    vector<int> range;
+    string gif;
 
-
+    // Input File Path
     while (true){
         cls();
         cout << "Enter the absolute path of the image (make sure the file exists)" << endl;
@@ -41,14 +49,15 @@ void main_program(){
         if (input_path.find("/") == string::npos && input_path.find("\\") == string::npos){ // Default input_path
             input_path = "io/input/" + input_path;
         }
-        cout << input_path << endl;
         if (!filesystem::exists(input_path) || !regex_match(input_path, image_regex)){
-            cout << "File doesn't exist or doesnt have a valid file extension!" << endl;
+            cout << endl;
+            clr("File doesn't exist or doesnt have a valid file extension!", 196);
             input_error();
             continue;}
         break;
     }
 
+    // Error Methods
     while (true){
         cls();
         cout << "Pick the Error Measurement Methods" << endl;
@@ -61,40 +70,63 @@ void main_program(){
         if (!input(mode) || (mode < 1 || mode > 5)){
             input_error();
             continue;}
+        range = get_threshold_range(mode);
         break;
     }
 
-
+    // Target Compression
     while (true){
         cls();
-        cout << "Enter threshold" << endl << endl;
-        cout << "Valid threshold ranges" << endl;
-        cout << "Variance:                 [0, 65025]" << endl;
-        cout << "Mean Absolute Difference: [0, 255]" << endl;
-        cout << "Max Pixel Difference:     [0, 255]" << endl;
-        cout << "Entropy:                  [0, 8]" << endl;
-        cout << "SSIM:                     [-1, 1]" << endl << endl;
+        cout << "Enter Target Compression Percentage" << endl;
+        cout << "Range: 0 - 1" << endl;
+        cout << "Enter 0 to disable this feature" << endl << endl;
         cout << ">> ";
-        // TODO: Validate double
-        if (!input(threshold)) threshold = -999;
-        if (!validate_threshold(mode, threshold)){
+        if(!input(target) || target < 0 || target > 1){
             input_error();
             continue;
         }
-        break;
-    }
-    
-    while (true){
-        cls();
-        cout << "Enter minimum block size" << endl;
-        cout << ">> ";
-        if (!input(min_block)){
-            input_error();
-            continue;
+        if (target){
+            threshold = (range[1]-range[0]) * target;
+            min_block = 0;
         }
         break;
     }
 
+    if (!target){
+        // Threshold
+        while (true){
+            cls();
+            cout << "Enter threshold" << endl << endl;
+            cout << "Valid threshold ranges" << endl;
+            cout << "Variance:                 [0, 2250]" << endl;
+            cout << "Mean Absolute Difference: [0, 50]" << endl;
+            cout << "Max Pixel Difference:     [0, 250]" << endl;
+            cout << "Entropy:                  [0, 8]" << endl;
+            cout << "SSIM:                     [0, 1]" << endl << endl;
+            cout << ">> ";
+            // TODO: Validate double
+            if (!input(threshold)) threshold = -999;
+            if (!validate_threshold(range, threshold)){
+                input_error();
+                continue;
+            }
+            break;
+        }
+        
+        // Min Block Size
+        while (true){
+            cls();
+            cout << "Enter minimum block size" << endl << endl;
+            cout << ">> ";
+            if (!input(min_block)){
+                input_error();
+                continue;
+            }
+            break;
+        }
+    }
+
+    // Output File Path
     while (true){
         cls();
         cout << "Enter the absolute path of where to save the image" << endl;
@@ -103,23 +135,65 @@ void main_program(){
         cout << ">> ";
         input(output_path);
         trim(output_path);
-        if (output_path.find("/") == string::npos && output_path.find("\\") == string::npos){ // Default input_path
+        if (output_path.find("/") == string::npos && output_path.find("\\") == string::npos){
             output_path = "io/output/" + output_path;
         }
         if (!regex_match(output_path, image_regex)){
-            cout << "Invalid path and/or filename!" << endl;
+            cout << endl;
+            clr("Invalid path and/or filename!",196);
             input_error();
             continue;
         }
         if (input_path == output_path){
-            cout << "Output path cannot be the same as Input path" << endl;
+            cout << endl;
+            clr("Output path cannot be the same as Input path", 196);
             input_error();
             continue;
         }
         break;
     }
 
-    compression(input_path, output_path, mode, threshold, min_block);
+    // GIF
+    while (true){
+        cls();
+        cout << "Save compression to GIF? (y/n)" << endl << endl;
+        cout << ">> ";
+        input(gif);
+        if (gif != "y" && gif != "Y" && gif != "n" && gif != "N"){
+            cout << endl;
+            clr("Enter y or n!", 196);
+            input_error();
+            continue;
+        }
+        break;
+    }
+
+    // GIF PATH
+    if (gif == "y" || gif == "Y"){
+        while(true){
+            cls();
+            cout << "Enter the absolute path of where to save the GIF" << endl;
+            cout << "Entering just the name of the file will use the default path instead" << endl;
+            cout << "Default: 'io/output/{name}.gif'" << endl << endl;
+            cout << ">> ";
+            input(gif_path);
+            trim(gif_path);
+            if (gif_path.find("/") == string::npos && gif_path.find("\\") == string::npos){
+                gif_path = "io/output/" + gif_path;
+            }
+            if (!regex_match(gif_path, gif_regex)){
+                cout << endl;
+                clr("Invalid path and/or filename!", 196);
+                input_error();
+                continue;
+            }
+            break;
+        }
+    }
+
+    cls();
+    cout << "Processing..";
+    compression(input_path, output_path, gif_path, mode, threshold, min_block);
     wait_for_input();
 }
 
@@ -142,9 +216,9 @@ void cls(){
 void input_error(){
     
     cout << endl;
-    clr(string(15, '='), 9);
-    clr("Invalid input!", 9);
-    clr(string(15, '='), 9);
+    clr(string(15, '='), 196);
+    clr("Invalid input!", 196);
+    clr(string(15, '='), 196);
     cout << endl;
     
     // Clear buffer
