@@ -25,20 +25,4 @@ void cls(void);
 /* Display alert for invalid input */
 void input_error(void);
 
-/**
- * @brief Prints word in ANSI escape color
- * 
- * This functions outputs given word(s) with specified ANSI Color Codes.
- * Supports 256-color ANSI escape characters 
- * 
- * @param word The text to be printed
- * @param code ANSI Color Codes (0-255) see 256-ansi-table.png in doc/img
- * @param endl If true, appends newline at the end of word
- */
-template<class T>
-void clr(const T& word, int code, bool enln = true) {
-    cout << "\033[38;5;" << code << "m" << word << "\033[0m";
-    if (enln) cout << endl;
-}
-
 #endif

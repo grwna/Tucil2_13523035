@@ -7,6 +7,7 @@
 #include <iostream>
 #include <limits>
 #include <cmath>
+#include <vector>
 using namespace std;
 
 /**
@@ -35,6 +36,22 @@ bool input(T &var) {
 }
 
 /**
+ * @brief Prints word in ANSI escape color
+ * 
+ * This functions outputs given word(s) with specified ANSI Color Codes.
+ * Supports 256-color ANSI escape characters 
+ * 
+ * @param word The text to be printed
+ * @param code ANSI Color Codes (0-255) see 256-ansi-table.png in doc/img
+ * @param endl If true, appends newline at the end of word
+ */
+template<class T>
+void clr(const T& word, int code, bool enln = true) {
+    cout << "\033[38;5;" << code << "m" << word << "\033[0m";
+    if (enln) cout << endl;
+}
+
+/**
  * @brief Create a file and all parent directory (if not exists)
  *  
  * @param Absolute path to file
@@ -51,12 +68,20 @@ void create_file(const string path);
 bool validate_int(int var);
 
 /**
+ * @brief Get the threshold range for the corresponding error method
+ * 
+ * @param mode 
+ * @return A "tuple" vector for min range and max range 
+ */
+vector<int> get_threshold_range(int mode);
+
+/**
  * @brief Validate threshold value
  * 
- * @param mode error calculation mode
+ * @param range range of error calculation mode
  * @param threshold the threshold to validate
  * @return true if valid 
  */
-bool validate_threshold(int mode, int threshold);
+bool validate_threshold(vector<int> range, int threshold);
 
 #endif
