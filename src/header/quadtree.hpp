@@ -92,13 +92,6 @@ class Quadtree {
         void build(const Image& img, int min_block, double threshold, function<double(const Image&, const Region&, const vector<uint8_t>&, int)> error_func);
 
         /**
-        * @brief Draws the compressed image based on the Quadtree, the image data is modified into the compressed data.
-        *
-        * @param img Image data to modify.
-        */
-        void draw(Image& img);
-
-        /**
          * @brief Draw the compressed image up to a certain depth only, to be used for GIF construction
          * 
          * @param img Image data

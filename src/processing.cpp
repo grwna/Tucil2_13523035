@@ -16,7 +16,7 @@ void save_image_file(Image img, string path){
         stbi_write_png(path.c_str(), img.width, img.height, img.channels, img.data, img.width * img.channels);
     } 
     else if (img.type == ".jpg" || img.type == ".jpeg"){
-        stbi_write_jpg(path.c_str(), img.width, img.height, img.channels, img.data, img.width * img.channels);
+        stbi_write_jpg(path.c_str(), img.width, img.height, img.channels, img.data, 85);
     }
 }
 
@@ -52,13 +52,15 @@ void compression(string in_path, string out_path, int mode, double threshold, in
     auto start_time = chrono::high_resolution_clock::now();
     Quadtree tree = Quadtree(0, 0, img.width, img.height);
     tree.build(img, min_block, threshold, error_func);
-    tree.draw(img);
+    int max_depth = tree.get_depth();
+    tree.draw_to_depth(img, 0, max_depth);
     auto execution_time_object = chrono::high_resolution_clock::now() - start_time;
     double execution_time = chrono::duration<double, std::milli>(execution_time_object).count();    // in ms
 
     try {
         create_file(out_path);
         save_image_file(img, out_path);
+        cout << "\033[2J\033[H";
         cout << "Compressed image saved successfully to " << out_path << endl;
         cout << "Execution time: " << execution_time << " ms" << endl << endl;
 
@@ -85,6 +87,5 @@ void compression(string in_path, string out_path, int mode, double threshold, in
     catch (const exception &e){
         cout << "Failed to save file!" << endl;
     }
-
-
 }
+
