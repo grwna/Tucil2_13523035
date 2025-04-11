@@ -39,10 +39,12 @@ void main_program(){
     // Input File Path
     while (true){
         cls();
-        cout << "Enter the absolute path of the image (make sure the file exists)" << endl;
-        cout << "Entering just the name of the file will use the default path instead" << endl;
-        cout << "Default: 'io/input/{image}.{ext}'" << endl << endl;
-        cout << ">> ";
+        clr("Enter the absolute path of the image (make sure the file exists)", 227);
+        clr("Entering just the name of the file will use the default path instead", 227);
+        cout << endl;
+        clr("Default: 'io/input/{image}.{ext}'", 227);
+        cout << endl;
+        clr(">> ", 230, false);
         input(input_path);
         trim(input_path);
         if (input_path.find("/") == string::npos && input_path.find("\\") == string::npos){ // Default input_path
@@ -53,19 +55,20 @@ void main_program(){
             clr("File doesn't exist or doesnt have a valid file extension!", 196);
             input_error();
             continue;}
-        break;
-    }
-
-    // Error Methods
-    while (true){
-        cls();
-        cout << "Pick the Error Measurement Methods" << endl;
-        cout << "1. Variance" << endl;
-        cout << "2. Mean Absolute Deviation" << endl;
-        cout << "3. Max Pixel Difference" << endl;
-        cout << "4. Entropy" << endl;
-        cout << "5. Structural Similarity Index (SSIM)" << endl << endl;
-        cout << ">> ";
+            break;
+        }
+        
+        // Error Methods
+        while (true){
+            cls();
+            clr("Pick the Error Measurement Methods", 227);
+            clr("1. Variance", 227);
+            clr("2. Mean Absolute Deviation", 227);
+            clr("3. Max Pixel Difference", 227);
+            clr("4. Entropy", 227);
+            clr("5. Structural Similarity Index (SSIM)", 227);
+            cout << endl;
+            clr(">> ", 230, false);
         if (!input(mode) || (mode < 1 || mode > 5)){
             input_error();
             continue;}
@@ -76,10 +79,12 @@ void main_program(){
     // Target Compression
     while (true){
         cls();
-        cout << "Enter Target Compression Percentage" << endl;
-        cout << "Range: 0 - 1" << endl;
-        cout << "Enter 0 to disable this feature" << endl << endl;
-        cout << ">> ";
+        clr("Enter Target Compression Percentage",227);
+        cout << endl;
+        clr("Range: 0 - 1",227);
+        clr("Enter 0 to disable this feature",227) ;
+        cout << endl;
+        clr(">> ", 230, false);
         if(!input(target) || target < 0 || target > 1){
             input_error();
             continue;
@@ -95,14 +100,16 @@ void main_program(){
         // Threshold
         while (true){
             cls();
-            cout << "Enter threshold" << endl << endl;
-            cout << "Valid threshold ranges" << endl;
-            cout << "Variance:                 [0, 2250]" << endl;
-            cout << "Mean Absolute Difference: [0, 50]" << endl;
-            cout << "Max Pixel Difference:     [0, 250]" << endl;
-            cout << "Entropy:                  [0, 8]" << endl;
-            cout << "SSIM:                     [0, 1]" << endl << endl;
-            cout << ">> ";
+            clr("Enter threshold",227); 
+            cout << endl;
+            clr("Valid threshold ranges",227);
+            clr("Variance:                 [0, 2250]",227);
+            clr("Mean Absolute Difference: [0, 50]",227);
+            clr("Max Pixel Difference:     [0, 250]",227);
+            clr("Entropy:                  [0, 8]",227);
+            clr("SSIM:                     [0, 1]",227);
+            cout << endl;
+            clr(">> ", 230, false);
             if (!input(threshold)) threshold = -999;  // If input fails, let validate_threshold 'throw' the error
             if (!validate_threshold(range, threshold)){
                 input_error();
@@ -114,8 +121,9 @@ void main_program(){
         // Min Block Size
         while (true){
             cls();
-            cout << "Enter minimum block size" << endl << endl;
-            cout << ">> ";
+            clr("Enter minimum block size", 227); 
+            cout << endl;
+            clr(">> ", 230, false);
             if (!input(min_block)){
                 input_error();
                 continue;
@@ -127,10 +135,12 @@ void main_program(){
     // Output File Path
     while (true){
         cls();
-        cout << "Enter the absolute path of where to save the image" << endl;
-        cout << "Entering just the name of the file will use the default path instead" << endl;
-        cout << "Default: 'io/output/{image}.{ext}'" << endl << endl;
-        cout << ">> ";
+        clr("Enter the absolute path of where to save the image", 227);
+        clr("Entering just the name of the file will use the default path instead", 227);
+        cout << endl;
+        clr("Default: 'io/output/{image}.{ext}'", 227);
+        cout << endl;
+        clr(">> ", 230, false);
         input(output_path);
         trim(output_path);
         if (output_path.find("/") == string::npos && output_path.find("\\") == string::npos){
@@ -154,8 +164,9 @@ void main_program(){
     // GIF
     while (true){
         cls();
-        cout << "Save compression to GIF? (y/n)" << endl << endl;
-        cout << ">> ";
+        clr("Save compression to GIF? (y/n)", 227);
+        cout << endl;
+        clr(">> ", 230, false);
         input(gif);
         if (gif != "y" && gif != "Y" && gif != "n" && gif != "N"){
             cout << endl;
@@ -170,9 +181,10 @@ void main_program(){
     if (gif == "y" || gif == "Y"){
         while(true){
             cls();
-            cout << "Enable dithering for GIF? (y/n)" << endl;
-            cout << "Dithering: Better quality but bigger file size and slower creation" << endl << endl;
-            cout << ">> ";
+            clr("Enable dithering for GIF? (y/n)", 227);
+            clr("Dithering: Better quality but bigger file size and slower creation", 227); 
+            cout << endl;
+            clr(">> ", 230, false);
             input(gif);
             if (gif != "y" && gif != "Y" && gif != "n" && gif != "N"){
                 cout << endl;
@@ -190,10 +202,12 @@ void main_program(){
 
         while(true){
             cls();
-            cout << "Enter the absolute path of where to save the GIF" << endl;
-            cout << "Entering just the name of the file will use the default path instead" << endl;
-            cout << "Default: 'io/output/{name}.gif'" << endl << endl;
-            cout << ">> ";
+            clr("Enter the absolute path of where to save the GIF", 227);
+            clr("Entering just the name of the file will use the default path instead", 227);
+            cout << endl;
+            clr("Default: 'io/output/{name}.gif'", 227);
+            cout << endl;
+            clr(">> ", 230, false);
             input(gif_path);
             trim(gif_path);
             if (gif_path.find("/") == string::npos && gif_path.find("\\") == string::npos){
