@@ -16,8 +16,7 @@ void interface(){
             cout << "Select an option: ";
             input(choice);
             if (choice == 1){main_program();}
-            else if (choice == 2){help();}
-            else if (choice == 3){exit(0);}
+            else if (choice == 2){exit(0);}
             else {
                 input_error();
                 continue;
@@ -167,9 +166,29 @@ void main_program(){
         }
         break;
     }
-
+    
     // GIF PATH
     if (gif == "y" || gif == "Y"){
+        while(true){
+            cls();
+            cout << "Enable dithering for GIF? (y/n)" << endl;
+            cout << "Dithering: Better quality but bigger file size and slower creation" << endl << endl;
+            cout << ">> ";
+            input(gif);
+            if (gif != "y" && gif != "Y" && gif != "n" && gif != "N"){
+                cout << endl;
+                clr("Enter y or n!", 196);
+                input_error();
+                continue;
+            }
+            if (gif == "y" || gif == "Y"){
+                gif = ";;;;;";
+            } else {
+                gif = "";
+            }
+            break;
+        }
+
         while(true){
             cls();
             cout << "Enter the absolute path of where to save the GIF" << endl;
@@ -187,6 +206,7 @@ void main_program(){
                 input_error();
                 continue;
             }
+            gif_path = gif + gif_path;
             break;
         }
     }
@@ -194,11 +214,6 @@ void main_program(){
     cls();
     cout << "Processing..";
     compression(input_path, output_path, gif_path, mode, threshold, min_block);
-    wait_for_input();
-}
-
-void help(){
-    cout << "Display Help" << endl;
     wait_for_input();
 }
 
