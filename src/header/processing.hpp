@@ -26,16 +26,20 @@ Image read_image_file(string path);
  */
 void save_image_file(const Image img, string path);
 
+void create_gif(string path, Quadtree& tree, const Image& img, int max_depth);
+
 /**
  * Handles the entire proccess of compression, to be used in the interface
  * NOTE: Execution Time and File Size calculations are done here 
  * 
  * @param in_path  The path to the input image file.
  * @param out_path The path to save the compressed image file.
+ * @param gif_path The path to save the GIF file
  * @param mode     The error measurement  mode.
  * @param threshold The threshold value for the compression algorithm 
  * @param min_block The minimum block size for quadtree subdivision.
  */
-void compression(string in_path, string out_path, int mode, double threshold, int min_block);
+void compression(string in_path, string out_path, string gif_path, int mode, double threshold, int min_block);
+
 
 #endif
