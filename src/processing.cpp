@@ -63,7 +63,7 @@ void create_gif(string path, Quadtree& tree, const Image& img, int max_depth){
         }
         GifEnd(&writer);
         cout << endl;
-        cout << "GIF saved successfully to " << path << endl;
+        clr("GIF saved successfully to " + path, 10);
     } catch (const exception& e){
         clr("Failed to save GIF!", 196);
     }
@@ -98,7 +98,7 @@ void compression(string in_path, string out_path, string gif_path, int mode, dou
             break;
         case 5:
             error_func = (ErrorFunc) ssim;
-            threshold = 0.001 * threshold;
+            if (threshold) threshold = 0.8 + (0.2 * threshold);
             break;
         default:
             error_func = nullptr;
@@ -119,39 +119,41 @@ void compression(string in_path, string out_path, string gif_path, int mode, dou
         
         
         cout << "\033[2J\033[H";
-        cout << "Compressed image saved successfully to " << out_path << endl;
-        cout << "Execution time: " << execution_time << " ms" << endl;
+        clr("Compressed image saved successfully to " + out_path, 10);
+        clr("Execution time: " + to_string(execution_time) + " ms", 10);
         
         if (gif_path != "null"){
             start_time = chrono::high_resolution_clock::now();
-            cout << endl << "Creating GIF...";
+            cout << "Creating GIF...";
             create_gif(gif_path, tree, img, max_depth);
             execution_time_object = chrono::high_resolution_clock::now() - start_time;
             execution_time = chrono::duration<double, std::milli>(execution_time_object).count();    // in ms
-            cout << "Execution time: " << execution_time << " ms" << endl;
+            clr("Execution time: " + to_string(execution_time) + " ms", 227);
             cout << endl;
         }
-
-        cout << "Parameters:" << endl;
-        cout << "Error Method: " << mode << endl;
-        cout << "Threshold: " << threshold << endl;
-        cout << "Minimum Block Size: " << min_block << endl << endl;
+        
+        cout << endl;
+        clr("Parameters:", 227);
+        clr("Error Method: " + to_string(mode) , 227);
+        clr("Threshold: " + to_string(threshold), 227);
+        clr("Minimum Block Size: " + to_string(min_block), 227); 
+        cout << endl;
 
         try {
             uintmax_t input_file_size = filesystem::file_size(in_path);
             uintmax_t output_file_size = filesystem::file_size(out_path);
             double compression_percent = (1 - ((double)output_file_size/(double)input_file_size)) * 100;
-            cout << "Original Size: " << input_file_size << " Bytes" << endl;
-            cout << "Compressed Size: " << output_file_size << " Bytes" << endl;
-            cout << "Compression Percentage: " << compression_percent << "%" << endl;
+            clr("Original Size: " + to_string(input_file_size) + " Bytes", 69);
+            clr("Compressed Size: " + to_string(output_file_size) + " Bytes", 69);
+            clr("Compression Percentage: " + to_string(compression_percent) + "%", 69);
             
         } catch (const exception e){
             clr("Error reading file size!", 196); 
             cout << endl;
         }
 
-        cout << "Depth of Tree: " << max_depth << endl;
-        cout << "Amount of Nodes: " << tree.get_node_count() << endl;
+        clr("Depth of Tree: " + to_string(max_depth), 69);
+        clr("Amount of Nodes: " + to_string(tree.get_node_count()), 69);
     }
     catch (const exception &e){
         clr("Failed to save file!", 196);

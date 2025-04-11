@@ -4,7 +4,6 @@ Quadtree::Quadtree(int x, int y, int width, int height) :
     region({x, y, width, height}), isLeaf(true){
     for (int i = 0; i < 4; i++) children[i] = nullptr;
     this->region.pixel_count = (long long)region.width * region.height; // untuk gambar berdimensi sangat besar, menggunakan long-long 
-
 }
 
 Quadtree::~Quadtree(){
@@ -58,7 +57,7 @@ void Quadtree::build(const Image& img, int min_block, double threshold, function
     int half_width = region.width / 2;
     int half_height = region.height / 2;
 
-    if ((img.mode == 5 && error <= threshold) || region.width <= min_block || region.height <= min_block || error <= threshold) {
+    if (region.width <= min_block || region.height <= min_block || error <= threshold) {
         isLeaf = true;
         return;
     }
