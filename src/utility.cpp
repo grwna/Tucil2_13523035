@@ -22,18 +22,23 @@ void create_file(string path){
     }
 }
 
-bool validate_threshold(int mode, int threshold){
+vector<int> get_threshold_range(int mode){
     switch (mode){
         case 1:
-            return (threshold >= 0 && threshold <= pow(255,2));
+            return {0, 2250};
         case 2:
+            return {0,50};
         case 3:
-            return (threshold >= 0 && threshold <= 255);
+            return {0,250};
         case 4:
-            return (threshold >= 0 && threshold <= 8);
+            return {0,8};
         case 5:
-            return (threshold >= -1 && threshold <= 1);
+            return {-1,1};
         default:
-            return false;
+            return {0,0};
     }
+}
+
+bool validate_threshold(vector<int> range, int threshold){
+    return threshold >= range[0] && threshold <= range[1];
 }
