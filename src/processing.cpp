@@ -32,6 +32,7 @@ void create_gif(string path, Quadtree& tree, const Image& img, int max_depth){
             path.erase(0, 5);
             dither = true;
         }
+        create_file(path);
         
         if (!GifBegin(&writer, path.c_str(), w, h, delay, 8, dither)) {
             __throw_runtime_error;
@@ -74,6 +75,7 @@ void compression(string in_path, string out_path, string gif_path, int mode, dou
     Image img = read_image_file(in_path);
 
     if (img.data == nullptr) {
+        cout << endl;
         clr(string(15, '='), 196);
         clr("Failed to read image file!", 196);
         clr(string(15, '='), 196);
