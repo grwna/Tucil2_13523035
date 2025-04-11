@@ -36,12 +36,12 @@ The user can input an image file, along with compression parameters (target, thr
 </br>
 
 <div align="center" style="margin-bottom: 50px;">
-  <img src="doc/img/10.png" alt="Image" width="600" style="margin-right: 20px;"/>
-  <img src="doc/img/30.png" alt="Image" width="600"/>
+  <img src="doc/img/10.png" alt="Image" width="600" style="margin-bottom: 20px;"/>
+  <img src="doc/img/30.png" alt="Image" width="600" style="margin-bottom: 20px;"/>
   
 </div>
 <div align="center">
-  <img src="test/no_dither.gif" alt="GIF" width="700"/>
+  <img src="test/no_dither.gif" alt="GIF" width="700" style="margin-bottom: 20px;"/>
   
 </div>
 
