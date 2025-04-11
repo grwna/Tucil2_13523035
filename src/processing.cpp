@@ -124,11 +124,11 @@ void compression(string in_path, string out_path, string gif_path, int mode, dou
         
         if (gif_path != "null"){
             start_time = chrono::high_resolution_clock::now();
-            cout << "Creating GIF...";
+            cout << endl;
             create_gif(gif_path, tree, img, max_depth);
             execution_time_object = chrono::high_resolution_clock::now() - start_time;
             execution_time = chrono::duration<double, std::milli>(execution_time_object).count();    // in ms
-            clr("Execution time: " + to_string(execution_time) + " ms", 227);
+            clr("Execution time: " + to_string(execution_time) + " ms", 10);
             cout << endl;
         }
         
