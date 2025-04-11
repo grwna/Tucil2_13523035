@@ -34,7 +34,6 @@ double max_pixel_difference(const Image& img, const Region& region, const vector
 }
 
 double entropy(const Image& img, const Region& region, const vector<uint8_t>& mean, int ch_idx){
-    // Kemunculan masing2 nilai di masing2 channel
     vector<int> counts(256, 0);
     double entropy;
     for (int y = region.y; y < region.y + region.height; ++y) {
@@ -65,7 +64,6 @@ double ssim(const Image& img, const Region& region, const vector<uint8_t>& mean,
 
     double ssim_sum = 0;
     vector<double> weigths = {0.2989, 0.5870, 0.1140};  // Luminance Weighting 
-    // vector<double> weigths = {1/3, 1/3, 1/3};  // equal
     double var_x = variance(img, region, mean, ch_idx);
-    return weigths[ch_idx] * (C2 / (var_x * C2));
+    return 1 - (weigths[ch_idx] * (C2 / (var_x * C2)));
 }

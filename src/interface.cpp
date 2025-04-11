@@ -12,7 +12,7 @@ void interface(){
             clr("  ---------------------------------- ", 227);
             clr(" | Image Compression Using Quadtree |", 227);
             clr("  ---------------------------------- ", 227);
-            clr(sleepy_cat, 230);
+            clr(sleepy_cat, 227);
             cout << "Select an option: ";
             input(choice);
             if (choice == 1){main_program();}
@@ -85,7 +85,7 @@ void main_program(){
             continue;
         }
         if (target){
-            threshold = (range[1]-range[0]) * target;
+            threshold = (double)(range[1]-range[0]) * target;
             min_block = 0;
         }
         break;
@@ -103,8 +103,7 @@ void main_program(){
             cout << "Entropy:                  [0, 8]" << endl;
             cout << "SSIM:                     [0, 1]" << endl << endl;
             cout << ">> ";
-            // TODO: Validate double
-            if (!input(threshold)) threshold = -999;
+            if (!input(threshold)) threshold = -999;  // If input fails, let validate_threshold 'throw' the error
             if (!validate_threshold(range, threshold)){
                 input_error();
                 continue;
